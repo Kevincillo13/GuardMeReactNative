@@ -7,7 +7,7 @@ const Stack = createNativeStackNavigator()
 
 function AppStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: true}}>
       <Stack.Screen name="home" component = {HomePage}/>
       <Stack.Screen name="camera" component = {CameraPage}/> 
       <Stack.Screen name="image" component = {ImagePage}/>

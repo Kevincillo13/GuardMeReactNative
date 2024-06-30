@@ -8,7 +8,7 @@ const Stack = createNativeStackNavigator()
 function AuthStack() {
   const {authData, login, logout} = useAuth()
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="login" component={LoginPage}/>
       <Stack.Screen name="singUp" component={SignUpPage}/>
     </Stack.Navigator>
