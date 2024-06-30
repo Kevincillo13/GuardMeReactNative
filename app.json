@@ -10,8 +10,8 @@
         }
       ]
     ],
-    "name": "cuervo",
-    "slug": "cuervo",
+    "name": "GuardMe",
+    "slug": "guard_me",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,10 +29,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.cuervo"
+      "package": "com.guard_me"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png"
     }
   }
 }

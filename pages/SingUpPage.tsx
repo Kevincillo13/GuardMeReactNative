@@ -1,29 +1,27 @@
-import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Switch, StyleSheet, ImageBackground, ViewProps, KeyboardAvoidingView } from 'react-native';
-import useAuth from '../hooks/useAuth';
+import React from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Linking, KeyboardAvoidingView } from 'react-native';
 
-export type LoginCardPropos = ViewProps & {
-    handleSetSessions: Function
-};
-
-export default function LoginPage({navigation}) {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const { login } = useAuth();
+export default function SignUpPage({navigation}) {
     
     const image = require('../assets/background.jpg');
-
-    const handleLogin = async () => {
-        await login(username,password)
-    };
-
+    
     return (
         <KeyboardAvoidingView behavior='padding' style={styles.container}>
             <View style={styles.container}>
                 {/* Fondo de pantalla */}
                 <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-                    <View style={styles.loginContainer}>
-                        <Text style={styles.title}>Login</Text>
+                    <View style={styles.signupContainer}>
+                        <Text style={styles.title}>Sign Up</Text>
+
+                        {/* Campo de nombre de usuario */}
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.inputLabel}>User name</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Enter user name"
+                                placeholderTextColor="#A9A9A9"
+                            />
+                        </View>
 
                         {/* Campo de correo electrónico */}
                         <View style={styles.inputContainer}>
@@ -32,7 +30,6 @@ export default function LoginPage({navigation}) {
                                 style={styles.input}
                                 placeholder="Enter email"
                                 placeholderTextColor="#A9A9A9"
-                                onChangeText={(setUsername)}
                             />
                         </View>
 
@@ -43,27 +40,31 @@ export default function LoginPage({navigation}) {
                                 style={styles.input}
                                 placeholder="Enter password"
                                 placeholderTextColor="#A9A9A9"
-                                onChangeText={(setPassword)}
                                 secureTextEntry
                             />
                         </View>
 
-                        {/* Switch para "Remember me" */}
-                        <View style={styles.switchContainer}>
-                            <Switch />
-                            <Text style={styles.switchText}>Remember me</Text>
+                        {/* Campo de confirmación de contraseña */}
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.inputLabel}>Confirm Password</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Confirm password"
+                                placeholderTextColor="#A9A9A9"
+                                secureTextEntry
+                            />
                         </View>
 
-                        {/* Botón de inicio de sesión */}
-                        <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
-                            <Text style={styles.loginButtonText}>Login</Text>
+                        {/* Botón de registro */}
+                        <TouchableOpacity style={styles.signupButton}>
+                            <Text style={styles.signupButtonText}>Sign Up</Text>
                         </TouchableOpacity>
 
-                        {/* Texto "Don't have an account?" con enlace a la página de registro */}
-                        <Text style={styles.signupText}>
-                            Don't have an account?{' '}
-                            <Text onPress={()=>{navigation.navigate("singUp")}} style={styles.signupLink}>
-                                SignUp
+                        {/* Texto "Already have an account?" con enlace al inicio de sesión */}
+                        <Text style={styles.loginText}>
+                            Already have an account?{' '}
+                            <Text onPress={() => {navigation.navigate("login")}} style={styles.loginLink}>
+                                Login
                             </Text>
                         </Text>
 
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
     },
-    loginContainer: {
+    signupContainer: {
         backgroundColor: '#FFFFFF',
         padding: 20,
         width: 300,
@@ -125,33 +126,23 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         fontSize: 16,
     },
-    switchContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    switchText: {
-        marginLeft: 10,
-        fontSize: 16,
-        color: '#333333',
-    },
-    loginButton: {
+    signupButton: {
         backgroundColor: '#1E90FF',
         borderRadius: 5,
         padding: 15,
         alignItems: 'center',
         marginTop: 20,
     },
-    loginButtonText: {
+    signupButtonText: {
         color: '#FFFFFF',
         fontSize: 18,
         fontWeight: 'bold',
     },
-    signupText: {
+    loginText: {
         textAlign: 'center',
         marginTop: 20,
     },
-    signupLink: {
+    loginLink: {
         color: '#1E90FF',
         fontWeight: 'bold',
     },
