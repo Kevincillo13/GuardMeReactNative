@@ -1,13 +1,6 @@
-import { useContext } from "react"
-import { AuthContext } from "../providers/AuthProvider"
+import { useContext } from 'react';
+import { AuthContext } from '../providers/AuthProvider';
 
-type AuthContextType = { AuthData: boolean }
+const useAuth = () => useContext(AuthContext);
 
-function useAuth(){
-  const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error("No Auth Context found")
-  }
-  return context;
-}
-export default useAuth
+export default useAuth;

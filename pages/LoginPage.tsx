@@ -6,15 +6,20 @@ export type LoginCardPropos = ViewProps & {
     handleSetSessions: Function
 };
 
-export default function LoginPage({navigation}) {
+export default function LoginPage({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { login } = useAuth();
-    
+    const { login, user } = useAuth();
+
     const image = require('../assets/background.jpg');
 
     const handleLogin = async () => {
-        await login(email,password)
+        console.log(`Attempting login with email: ${email}, password: ${password}`);
+        await login(email, password);
+        if (user) {
+            console.log("Login successful, navigating to home screen");
+            navigation.navigate("singUp");
+        }
     };
 
     return (
@@ -32,7 +37,7 @@ export default function LoginPage({navigation}) {
                                 style={styles.input}
                                 placeholder="Enter email"
                                 placeholderTextColor="#A9A9A9"
-                                onChangeText={(setEmail)}
+                                onChangeText={setEmail}
                             />
                         </View>
 
@@ -43,7 +48,7 @@ export default function LoginPage({navigation}) {
                                 style={styles.input}
                                 placeholder="Enter password"
                                 placeholderTextColor="#A9A9A9"
-                                onChangeText={(setPassword)}
+                                onChangeText={setPassword}
                                 secureTextEntry
                             />
                         </View>
@@ -62,7 +67,7 @@ export default function LoginPage({navigation}) {
                         {/* Texto "Don't have an account?" con enlace a la página de registro */}
                         <Text style={styles.signupText}>
                             Don't have an account?{' '}
-                            <Text onPress={()=>{navigation.navigate("singUp")}} style={styles.signupLink}>
+                            <Text onPress={() => { navigation.navigate("singUp") }} style={styles.signupLink}>
                                 SignUp
                             </Text>
                         </Text>
@@ -84,81 +89,84 @@ export default function LoginPage({navigation}) {
     );
 }
 
+
+
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     image: {
-        flex: 1,
-        justifyContent: 'center',
+      flex: 1,
+      justifyContent: 'center',
     },
-    loginContainer: {
-        backgroundColor: '#FFFFFF',
-        padding: 20,
-        width: 300,
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowRadius: 10,
-        shadowOffset: { width: 0, height: 2 },
-        elevation: 5,
-    },
+
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
+      fontSize: 36,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      marginBottom: 40,
+      color: 'white',
     },
     inputContainer: {
-        marginVertical: 10,
+      marginVertical: 10,
+      marginHorizontal: 35,
+      width: '80%',
     },
     inputLabel: {
-        fontSize: 16,
-        color: '#333333',
-        marginBottom: 5,
+      fontSize: 16,
+      color: 'white',
+      marginBottom: 5,
     },
     input: {
-        backgroundColor: '#F8F8F8',
-        borderRadius: 5,
-        padding: 10,
-        borderColor: '#DDDDDD',
-        borderWidth: 1,
-        fontSize: 16,
+      backgroundColor: 'rgba(255, 255, 255, 0.8)', // Fondo blanco semitransparente
+      borderRadius: 5,
+      padding: 10,
+      borderColor: '#DDDDDD',
+      borderWidth: 1,
+      fontSize: 16,
     },
     switchContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: '100%',
+      marginVertical: 10,
+
     },
     switchText: {
-        marginLeft: 10,
-        fontSize: 16,
-        color: '#333333',
+      fontSize: 16,
+      color: 'white',
     },
+   
     loginButton: {
-        backgroundColor: '#1E90FF',
-        borderRadius: 5,
-        padding: 15,
-        alignItems: 'center',
-        marginTop: 20,
+      backgroundColor: '#1E90FF',
+      borderRadius: 5,
+      padding: 15,
+      alignItems: 'center',
+      width: '80%',
+      marginTop: 20,
+      marginHorizontal: 35,
     },
     loginButtonText: {
-        color: '#FFFFFF',
-        fontSize: 18,
-        fontWeight: 'bold',
+      color: '#FFFFFF',
+      fontSize: 18,
+      fontWeight: 'bold',
     },
     signupText: {
-        textAlign: 'center',
-        marginTop: 20,
+      textAlign: 'center',
+      marginTop: 20,
+      color: 'white',
     },
     signupLink: {
-        color: '#1E90FF',
-        fontWeight: 'bold',
+      color: '#1E90FF',
+      fontWeight: 'bold',
     },
     aboutUsLink: {
-        textAlign: 'center',
-        marginTop: 10,
-        textDecorationLine: 'underline',
-        color: '#1E90FF',
+      textAlign: 'center',
+      marginTop: 10,
+      textDecorationLine: 'underline',
+      color: 'white',
     },
-});
+  });

@@ -1,21 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import Router from './routes/Router';
+// App.js o App.tsx
+
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { AuthProvider } from './providers/AuthProvider';
+import AuthStack from './routes/AuthStack';
+import AppStack from './routes/AppStack';
+import useAuth from './hooks/useAuth';
+
+function Routes() {
+  const { user } = useAuth();
+
+  return (
+    <NavigationContainer>
+      {user ? <AppStack /> : <AuthStack />}
+    </NavigationContainer>
+  );
+}
 
 export default function App() {
   return (
     <AuthProvider>
-      <Router />
-      </AuthProvider>
+      <Routes />
+    </AuthProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
