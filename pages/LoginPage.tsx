@@ -7,14 +7,14 @@ export type LoginCardPropos = ViewProps & {
 };
 
 export default function LoginPage({navigation}) {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { login } = useAuth();
     
     const image = require('../assets/background.jpg');
 
     const handleLogin = async () => {
-        await login(username,password)
+        await login(email,password)
     };
 
     return (
@@ -32,7 +32,7 @@ export default function LoginPage({navigation}) {
                                 style={styles.input}
                                 placeholder="Enter email"
                                 placeholderTextColor="#A9A9A9"
-                                onChangeText={(setUsername)}
+                                onChangeText={(setEmail)}
                             />
                         </View>
 
