@@ -8,7 +8,7 @@ export default function SignUpPage({navigation}) {
     return (
         <KeyboardAvoidingView behavior='padding' style={styles.container}>
             <View style={styles.container}>
-                {/*  Fondo de pantalla */}
+                {/* Fondo de pantalla */}
                 <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                     <View style={styles.signupContainer}>
                         <Text style={styles.title}>Sign Up</Text>
