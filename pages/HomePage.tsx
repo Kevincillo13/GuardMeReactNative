@@ -1,13 +1,19 @@
-import { Button, View, Text } from "react-native";
-import useAuth from "../hooks/useAuth";
+import React from 'react';
+import { Button, View, Text, SafeAreaView } from 'react-native';
+import useAuth from '../hooks/useAuth';
 
-function HomePage({navigation}) {
-  const {authData, login, logout} = useAuth()
+function HomePage({ navigation }) {
+  const { authData, login, logout } = useAuth();
 
-  return (<View>
-    <Button title="camera" onPress={()=>{navigation.navigate("camera")}}></Button>
-    <Button title="image" onPress={()=>{navigation.navigate("image")}}></Button>
-    <Button title="Logout" onPress={logout} />
-    </View>)
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Button title="camera" onPress={() => { navigation.navigate("camera") }} />
+        <Button title="image" onPress={() => { navigation.navigate("image") }} />
+        <Button title="Logout" onPress={logout} />
+      </View>
+    </SafeAreaView>
+  );
 }
-export default HomePage
+
+export default HomePage;
