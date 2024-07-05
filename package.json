@@ -1,5 +1,5 @@
 {
-  "name": "cuervo",
+  "name": "guard_me",
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
   "scripts": {
@@ -15,7 +15,6 @@
     "@react-navigation/native-stack": "^6.9.26",
     "cloudinary-react-native": "^0.0.2",
     "expo": "~51.0.17",
-    "expo-camera": "~15.0.12",
     "expo-crypto": "~13.0.2",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "^3.0.6",

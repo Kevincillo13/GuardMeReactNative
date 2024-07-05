@@ -1,11 +1,12 @@
-import React from 'react';
-import { View, Text, SafeAreaView } from 'react-native';
+import { Button, View, Text, SafeAreaView } from 'react-native';
+import useAuth from '../hooks/useAuth';
 
-function ProfilePage() {
+function ProfilePage({ navigation }) {
+  const { authData, logout } = useAuth();
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Profile Page</Text>
+        <Button title="Logout" onPress={logout} />
       </View>
     </SafeAreaView>
   );

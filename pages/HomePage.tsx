@@ -8,9 +8,7 @@ function HomePage({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Button title="camera" onPress={() => { navigation.navigate("camera") }} />
-        <Button title="image" onPress={() => { navigation.navigate("image") }} />
-        <Button title="Logout" onPress={logout} />
+        
       </View>
     </SafeAreaView>
   );
