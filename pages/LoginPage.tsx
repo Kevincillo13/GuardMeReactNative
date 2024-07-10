@@ -26,7 +26,7 @@ export default function LoginPage({ navigation }) {
         <KeyboardAvoidingView behavior='padding' style={styles.container}>
             <View style={styles.container}>
                 {/* Fondo de pantalla */}
-                <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+                <ImageBackground source={image} resizeMode="cover" style={styles.image} blurRadius={5}>
                     <View style={styles.loginContainer}>
                         <Text style={styles.title}>Login</Text>
 
