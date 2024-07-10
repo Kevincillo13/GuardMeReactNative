@@ -9,7 +9,7 @@ export default function SignUpPage({navigation}) {
         <KeyboardAvoidingView behavior='padding' style={styles.container}>
             <View style={styles.container}>
                 {/* Fondo de pantalla */}
-                <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+                <ImageBackground source={image} resizeMode="cover" style={styles.image} blurRadius={5}>
                     <View style={styles.signupContainer}>
                         <Text style={styles.title}>Sign Up</Text>
 
@@ -94,32 +94,29 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     signupContainer: {
-        backgroundColor: '#FFFFFF',
-        padding: 20,
+        backgroundColor: 'transparent',
+        padding: 10,
         width: 300,
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowRadius: 10,
-        shadowOffset: { width: 0, height: 2 },
-        elevation: 5,
+        marginLeft: '9%',
     },
     title: {
-        fontSize: 24,
+        color: '#FFFFFF',
+        fontSize: 36,
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
     },
     inputContainer: {
         marginVertical: 10,
+        
     },
     inputLabel: {
         fontSize: 16,
-        color: '#333333',
+        color: 'white',
         marginBottom: 5,
     },
     input: {
-        backgroundColor: '#F8F8F8',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
         borderRadius: 5,
         padding: 10,
         borderColor: '#DDDDDD',
@@ -139,6 +136,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     loginText: {
+        color: '#FFFFFF',
         textAlign: 'center',
         marginTop: 20,
     },
