@@ -1,43 +1,126 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView, StyleSheet, ScrollView, FlatList } from 'react-native';
 import axios from 'axios';
 
-const PatientPage = () => {
-  const [patientData, setPatientData] = useState(null);
-  const [editing, setEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    gender: '',
-    birthDate: '',
-    contactFirstName: '',
-    contactLastName: '',
-    contactPhoneNum: '',
-    contactEmail: ''
-  });
+const API_BASE_URL = 'http://192.168.1.64:3000/GuardMeAPI';
+
+// Datos de ejemplo
+const examplePatients = [
+  {
+    id_patient: 1,
+    first_name: 'Brayan',
+    last_name: 'Chavez',
+    gender: 'Male',
+    birth_date: 'June/3th/2011',
+    contacts: [
+      {
+        first_name: 'Rocio',
+        last_name: 'Rodríguez',
+        phone_num: '6141826535',
+        email: 'roxxio28@gmail.com'
+      }
+    ]
+  },
+  {
+    id_patient: 2,
+    first_name: 'Maria',
+    last_name: 'Garcia',
+    gender: 'Female',
+    birth_date: 'April/21th/1990',
+    contacts: [
+      {
+        first_name: 'Juan',
+        last_name: 'Garcia',
+        phone_num: '6123456789',
+        email: 'juan.garcia@example.com'
+      }
+    ]
+  },
+  {
+    id_patient: 3,
+    first_name: 'Carlos',
+    last_name: 'Sanchez',
+    gender: 'Male',
+    birth_date: 'November/10th/1985',
+    contacts: [
+      {
+        first_name: 'Ana',
+        last_name: 'Sanchez',
+        phone_num: '6198765432',
+        email: 'ana.sanchez@example.com'
+      }
+    ]
+  }
+];
+
+const PatientList = ({ onSelectPatient }) => {
+  const [patients, setPatients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchPatientData = async () => {
+    const fetchPatients = async () => {
       try {
-        const response = await axios.get('http://192.168.1.64:3000/GuardMeAPI/patients/1'); // Cambia el ID del paciente según corresponda
-        setPatientData(response.data);
-        setFormData({
-          firstName: response.data.first_name,
-          lastName: response.data.last_name,
-          gender: response.data.gender,
-          birthDate: response.data.birth_date,
-          contactFirstName: response.data.contacts[0].first_name,
-          contactLastName: response.data.contacts[0].last_name,
-          contactPhoneNum: response.data.contacts[0].phone_num,
-          contactEmail: response.data.contacts[0].email
-        });
+        // Aquí se usarán los datos de ejemplo en lugar de la API
+        // const response = await axios.get(`${API_BASE_URL}/patients`);
+        // setPatients(response.data);
+        setPatients(examplePatients); // Usar datos de ejemplo
+        setLoading(false);
       } catch (error) {
-        console.error('Error fetching patient data:', error);
+        setError(error);
+        setLoading(false);
       }
     };
 
-    fetchPatientData();
+    fetchPatients();
   }, []);
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <Text>Loading...</Text>
+      </SafeAreaView>
+    );
+  }
+
+  if (error) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <Text>Error fetching patients: {error.message}</Text>
+      </SafeAreaView>
+    );
+  }
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity style={styles.card} onPress={() => onSelectPatient(item)}>
+      <Text style={styles.title}>{item.first_name} {item.last_name}</Text>
+      <Text>Birth date: {item.birth_date}</Text>
+      <Text>Gender: {item.gender}</Text>
+    </TouchableOpacity>
+  );
+
+  return (
+    <FlatList
+      data={patients}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id_patient.toString()}
+      contentContainerStyle={styles.listContainer}
+    />
+  );
+};
+
+const PatientDetails = ({ patient }) => {
+  const [formData, setFormData] = useState({
+    firstName: patient.first_name,
+    lastName: patient.last_name,
+    gender: patient.gender,
+    birthDate: patient.birth_date,
+    contactFirstName: patient.contacts[0]?.first_name || '',
+    contactLastName: patient.contacts[0]?.last_name || '',
+    contactPhoneNum: patient.contacts[0]?.phone_num || '',
+    contactEmail: patient.contacts[0]?.email || ''
+  });
+  const [editing, setEditing] = useState(false);
 
   const handleEdit = () => {
     setEditing(true);
@@ -45,7 +128,7 @@ const PatientPage = () => {
 
   const handleSubmit = async () => {
     try {
-      await axios.put(`http://192.168.1.64:3000/GuardMeAPI/patients/${patientData.id_patient}`, {
+      await axios.put(`${API_BASE_URL}/patients/${patient.id_patient}`, {
         first_name: formData.firstName,
         last_name: formData.lastName,
         gender: formData.gender,
@@ -60,38 +143,27 @@ const PatientPage = () => {
         ]
       });
       setEditing(false);
-      // Vuelve a cargar los datos del paciente
-      const response = await axios.get('http://192.168.1.64:3000/GuardMeAPI/patients/1');
-      setPatientData(response.data);
     } catch (error) {
       console.error('Error updating patient data:', error);
     }
   };
 
-  if (!patientData) {
-    return (
-      <SafeAreaView style={styles.loadingContainer}>
-        <Text>Loading...</Text>
-      </SafeAreaView>
-    );
-  }
-
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView>
         {!editing ? (
           <View>
             <View style={styles.card}>
               <Text style={styles.title}>Patient Information:</Text>
-              <Text>Name: {patientData.first_name} {patientData.last_name}</Text>
-              <Text>Birth date: {patientData.birth_date}</Text>
-              <Text>Gender: {patientData.gender}</Text>
+              <Text>Name: {patient.first_name} {patient.last_name}</Text>
+              <Text>Birth date: {patient.birth_date}</Text>
+              <Text>Gender: {patient.gender}</Text>
             </View>
             <View style={styles.card}>
               <Text style={styles.title}>Contact Information:</Text>
-              <Text>Name: {patientData.contacts[0].first_name} {patientData.contacts[0].last_name}</Text>
-              <Text>Phone: {patientData.contacts[0].phone_num}</Text>
-              <Text>Email: {patientData.contacts[0].email}</Text>
+              <Text>Name: {patient.contacts[0]?.first_name} {patient.contacts[0]?.last_name}</Text>
+              <Text>Phone: {patient.contacts[0]?.phone_num}</Text>
+              <Text>Email: {patient.contacts[0]?.email}</Text>
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.button} onPress={handleEdit}>
@@ -158,6 +230,20 @@ const PatientPage = () => {
           </View>
         )}
       </ScrollView>
+    </View>
+  );
+};
+
+const PatientPage = () => {
+  const [selectedPatient, setSelectedPatient] = useState(null);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {selectedPatient ? (
+        <PatientDetails patient={selectedPatient} />
+      ) : (
+        <PatientList onSelectPatient={setSelectedPatient} />
+      )}
     </SafeAreaView>
   );
 };
@@ -173,16 +259,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  listContainer: {
+    paddingBottom: 16,
+  },
   card: {
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
     marginVertical: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 2, height: 0.5 }, 
-    shadowOpacity: 0.15, 
-    shadowRadius: 6, 
-    elevation: 3, 
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
   },
   title: {
     fontWeight: 'bold',
@@ -196,25 +285,23 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginVertical: 5,
-    fontSize: 16,
   },
   buttonContainer: {
     marginTop: 10,
+    padding: 10,
+    justifyContent: "center",
     alignItems: "center",
   },
   button: {
     backgroundColor: '#007BFF',
-    borderRadius: 5,
     paddingVertical: 10,
     paddingHorizontal: 20,
+    borderRadius: 5,
   },
   buttonText: {
     color: 'white',
-    fontSize: 16,
     fontWeight: 'bold',
   },
 });
 
 export default PatientPage;
-
-
