@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, TextInput, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
 import axios from 'axios';
 
 const PatientPage = () => {
@@ -19,7 +19,7 @@ const PatientPage = () => {
   useEffect(() => {
     const fetchPatientData = async () => {
       try {
-        const response = await axios.get('http://10.100.1.9:3000/GuardMeAPI/patients/1'); // Cambia el ID del paciente según corresponda
+        const response = await axios.get('http://192.168.1.64:3000/GuardMeAPI/patients/1'); // Cambia el ID del paciente según corresponda
         setPatientData(response.data);
         setFormData({
           firstName: response.data.first_name,
@@ -45,7 +45,7 @@ const PatientPage = () => {
 
   const handleSubmit = async () => {
     try {
-      await axios.put(`http://10.100.1.9:3000/GuardMeAPI/patients/${patientData.id_patient}`, {
+      await axios.put(`http://192.168.1.64:3000/GuardMeAPI/patients/${patientData.id_patient}`, {
         first_name: formData.firstName,
         last_name: formData.lastName,
         gender: formData.gender,
@@ -61,7 +61,7 @@ const PatientPage = () => {
       });
       setEditing(false);
       // Vuelve a cargar los datos del paciente
-      const response = await axios.get('http://10.100.1.9:3000/GuardMeAPI/patients/1');
+      const response = await axios.get('http://192.168.1.64:3000/GuardMeAPI/patients/1');
       setPatientData(response.data);
     } catch (error) {
       console.error('Error updating patient data:', error);
@@ -94,7 +94,9 @@ const PatientPage = () => {
               <Text>Email: {patientData.contacts[0].email}</Text>
             </View>
             <View style={styles.buttonContainer}>
-              <Button title="Edit information" onPress={handleEdit} />
+              <TouchableOpacity style={styles.button} onPress={handleEdit}>
+                <Text style={styles.buttonText}>Edit information</Text>
+              </TouchableOpacity>
             </View>
           </View>
         ) : (
@@ -149,7 +151,9 @@ const PatientPage = () => {
               onChangeText={text => setFormData({ ...formData, contactEmail: text })} 
             />
             <View style={styles.buttonContainer}>
-              <Button title="Submit" onPress={handleSubmit} />
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Submit</Text>
+              </TouchableOpacity>
             </View>
           </View>
         )}
@@ -175,16 +179,15 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 10,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 50,
-    elevation: 3,
+    shadowOffset: { width: 2, height: 0.5 }, 
+    shadowOpacity: 0.15, 
+    shadowRadius: 6, 
+    elevation: 3, 
   },
   title: {
     fontWeight: 'bold',
+    fontSize: 18,
+    color: '#333',
     marginBottom: 10,
   },
   input: {
@@ -193,11 +196,25 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginVertical: 5,
+    fontSize: 16,
   },
   buttonContainer: {
-    marginTop: 20,
+    marginTop: 10,
+    alignItems: "center",
+  },
+  button: {
+    backgroundColor: '#007BFF',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
 export default PatientPage;
+
 
