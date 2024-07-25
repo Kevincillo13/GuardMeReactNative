@@ -55,8 +55,8 @@ export default function LoginPage({ navigation }) {
 
                         {/* Switch para "Remember me" */}
                         <View style={styles.switchContainer}>
-                            <Switch />
-                            <Text style={styles.switchText}>Remember me</Text>
+                            <Text />
+                            <Text style={styles.switchText}></Text>
                         </View>
 
                         {/* Botón de inicio de sesión */}
