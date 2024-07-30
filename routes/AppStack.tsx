@@ -4,9 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import HomePage from '../pages/HomePage';
 import PatientPage from '../pages/PatientPage';
-import QRPage from '../pages/QRPage';
 import ProfilePage from '../pages/ProfilePage';
-import PatientRegisterPage from '../pages/PatientRegisterPage';
 
 const Tab = createBottomTabNavigator();
 
@@ -73,27 +71,6 @@ function BottomTabs() {
         }}
       />
       <Tab.Screen 
-        name="qr" 
-        component={QRPage}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: 40,
-              width: 40,
-              borderRadius: 25,
-              backgroundColor: focused ? '#0f74d3' : 'transparent',
-              paddingTop: 8,
-              paddingBottom: 10,
-              transform: [{ scale: focused ? 1.2 : 1 }],
-            }}>
-              <FontAwesome name="qrcode" size={24} color={focused ? 'white' : '#0f74d3'} />
-            </View>
-          ),
-        }}
-      />
-      <Tab.Screen 
         name="profile" 
         component={ProfilePage}
         options={{
@@ -124,7 +101,6 @@ function AppStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="main" component={BottomTabs} />
-      <Stack.Screen name="patientRegister" component={PatientRegisterPage} />
     </Stack.Navigator>
   );
 }
