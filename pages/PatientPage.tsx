@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, SafeAreaView, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, SafeAreaView, TouchableOpacity, StyleSheet, ScrollView, ImageBackground } from 'react-native';
 import axios from 'axios';
 
 const PatientPage = () => {
@@ -19,7 +19,7 @@ const PatientPage = () => {
   useEffect(() => {
     const fetchPatientData = async () => {
       try {
-        const response = await axios.get('http://192.168.100.52:3000/GuardMeAPI/patients/1'); // Cambia el ID del paciente según corresponda
+        const response = await axios.get('http://192.168.1.64:3000/GuardMeAPI/patients/1'); // Cambia el ID del paciente según corresponda
         setPatientData(response.data);
         setFormData({
           firstName: response.data.first_name,
@@ -45,7 +45,7 @@ const PatientPage = () => {
 
   const handleSubmit = async () => {
     try {
-      await axios.put(`http://192.168.100.52:3000/GuardMeAPI/patients/${patientData.id_patient}`, {
+      await axios.put(`http://192.168.1.64:3000/GuardMeAPI/patients/${patientData.id_patient}`, {
         first_name: formData.firstName,
         last_name: formData.lastName,
         gender: formData.gender,
@@ -61,13 +61,12 @@ const PatientPage = () => {
       });
       setEditing(false);
       // Vuelve a cargar los datos del paciente
-      const response = await axios.get('http://10.100.0.75:3000/GuardMeAPI/patients/1');
+      const response = await axios.get('http://192.168.1.64:3000/GuardMeAPI/patients/1');
       setPatientData(response.data);
     } catch (error) {
       console.error('Error updating patient data:', error);
     }
   };
-  
 
   const handleCancel = () => {
     setEditing(false);
@@ -82,93 +81,105 @@ const PatientPage = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, padding: 16 }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-        {!editing ? (
-          <View style={styles.centeredContainer}>
-            <View style={styles.infoCard}>
-              <Text style={styles.sectionTitle}>Patient Information:</Text>
-              <Text>Name: {patientData.first_name} {patientData.last_name}</Text>
-              <Text>Birth date: {patientData.birth_date}</Text>
-              <Text>Gender: {patientData.gender}</Text>
-            </View>
-            <View style={styles.infoCard}>
-              <Text style={styles.sectionTitle}>Contact Information:</Text>
-              <Text>Name: {patientData.contacts[0].first_name} {patientData.contacts[0].last_name}</Text>
-              <Text>Phone: {patientData.contacts[0].phone_num}</Text>
-              <Text>Email: {patientData.contacts[0].email}</Text>
-            </View>
-            <TouchableOpacity style={styles.buttonBottom} onPress={handleEdit}>
-              <Text style={styles.buttonText}>Edit information</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={styles.editContainer}>
-            <Text style={styles.sectionTitle}>Edit Information:</Text>
-            <View style={styles.infoCard}>
-              <Text style={styles.sectionSubtitle}>Patient information:</Text>
-              <Text>Name</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Put name here"
-                value={formData.firstName}
-                onChangeText={text => setFormData({ ...formData, firstName: text })}
-              />
-              <Text>Birth date</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Put birth date here"
-                value={formData.birthDate}
-                onChangeText={text => setFormData({ ...formData, birthDate: text })}
-              />
-              <Text>Gender</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Put gender here"
-                value={formData.gender}
-                onChangeText={text => setFormData({ ...formData, gender: text })}
-              />
-            </View>
-            <View style={styles.infoCard}>
-              <Text style={styles.sectionSubtitle}>Contact information:</Text>
-              <Text>Name</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Put name here"
-                value={formData.contactFirstName}
-                onChangeText={text => setFormData({ ...formData, contactFirstName: text })}
-              />
-              <Text>Phone number</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Put phone number here"
-                value={formData.contactPhoneNum}
-                onChangeText={text => setFormData({ ...formData, contactPhoneNum: text })}
-              />
-              <Text>Email</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Put email here"
-                value={formData.contactEmail}
-                onChangeText={text => setFormData({ ...formData, contactEmail: text })}
-              />
-            </View>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.button} onPress={handleCancel}>
-                <Text style={styles.buttonText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Submit</Text>
+    <ImageBackground source={require('../assets/brainBG.png')} style={styles.backgroundImage}>
+      <SafeAreaView style={styles.container}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+          {!editing ? (
+            <View style={styles.centeredContainer}>
+              <View style={styles.infoCard}>
+                <Text style={styles.sectionTitle}>Patient Information:</Text>
+                <Text>Name: {patientData.first_name} {patientData.last_name}</Text>
+                <Text>Birth date: {patientData.birth_date}</Text>
+                <Text>Gender: {patientData.gender}</Text>
+              </View>
+              <View style={styles.infoCard}>
+                <Text style={styles.sectionTitle}>Contact Information:</Text>
+                <Text>Name: {patientData.contacts[0].first_name} {patientData.contacts[0].last_name}</Text>
+                <Text>Phone: {patientData.contacts[0].phone_num}</Text>
+                <Text>Email: {patientData.contacts[0].email}</Text>
+              </View>
+              <TouchableOpacity style={styles.buttonBottom} onPress={handleEdit}>
+                <Text style={styles.buttonText}>Edit information</Text>
               </TouchableOpacity>
             </View>
-          </View>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+          ) : (
+            <View style={styles.editContainer}>
+              <Text style={styles.sectionTitle}>Edit Information:</Text>
+              <View style={styles.infoCard}>
+                <Text style={styles.sectionSubtitle}>Patient information:</Text>
+                <Text>Name</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Put name here"
+                  value={formData.firstName}
+                  onChangeText={text => setFormData({ ...formData, firstName: text })}
+                />
+                <Text>Birth date</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Put birth date here"
+                  value={formData.birthDate}
+                  onChangeText={text => setFormData({ ...formData, birthDate: text })}
+                />
+                <Text>Gender</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Put gender here"
+                  value={formData.gender}
+                  onChangeText={text => setFormData({ ...formData, gender: text })}
+                />
+              </View>
+              <View style={styles.infoCard}>
+                <Text style={styles.sectionSubtitle}>Contact information:</Text>
+                <Text>Name</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Put name here"
+                  value={formData.contactFirstName}
+                  onChangeText={text => setFormData({ ...formData, contactFirstName: text })}
+                />
+                <Text>Phone number</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Put phone number here"
+                  value={formData.contactPhoneNum}
+                  onChangeText={text => setFormData({ ...formData, contactPhoneNum: text })}
+                />
+                <Text>Email</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Put email here"
+                  value={formData.contactEmail}
+                  onChangeText={text => setFormData({ ...formData, contactEmail: text })}
+                />
+              </View>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button} onPress={handleCancel}>
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                  <Text style={styles.buttonText}>Submit</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </ScrollView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Ajustar la transparencia aquí
+    padding: 16,
+  },
   centeredContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -218,7 +229,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#007bff',
     padding: 16,
     borderRadius: 8,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
     marginRight: 8,
@@ -227,17 +238,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#6c757d',
     padding: 16,
     borderRadius: 8,
-    
     alignItems: 'center',
     flex: 1,
-
   },
   buttonBottom: {
     backgroundColor: '#007bff',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
-    bottom: -10,
     width: '90%',
   },
   buttonText: {
@@ -247,3 +255,4 @@ const styles = StyleSheet.create({
 });
 
 export default PatientPage;
+
